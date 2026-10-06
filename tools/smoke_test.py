@@ -48,5 +48,21 @@ check("print html ok", s==200 and b"Print" in d)
 s,_,d = get("/")
 check("frontend serves", s==200 and b"Shlokam" in d)
 
+# audio: verse resolution (302, no download) + byte-range chapter audio
+import urllib.request as _u, urllib.error as _e
+req = _u.Request(BASE+"/api/verse-audio?content_id=gita-2-47")
+class _NoRedir(_u.HTTPRedirectHandler):
+    def redirect_request(self, req, fp, code, msg, headers, newurl): return None
+try:
+    _u.build_opener(_NoRedir).open(req, timeout=20)
+    check("verse-audio 302", False, "expected redirect")
+except _e.HTTPError as e:
+    check("verse-audio 302", e.code in (301,302) and "/api/audio?token=" in (e.headers.get("Location") or ""), f"{e.code} {e.headers.get('Location')}")
+req = _u.Request(BASE+"/api/audio/chapter/2", headers={"Range": "bytes=0-1023"})
+with _u.urlopen(req, timeout=90) as r:
+    check("chapter audio range", r.status==206 and r.headers.get_content_type()=="audio/mpeg", f"{r.status} {r.headers.get_content_type()}") if hasattr(r.headers, 'get_content_type') else check("chapter audio range", r.status==206, str(r.status))
+s,_,d = get("/api/audio/status")
+check("audio status", json.loads(d).get("files",0)>=1, d[:100])
+
 print(f"\n{len(fails)} failures" if fails else "\nALL TESTS PASSED")
 sys.exit(1 if fails else 0)

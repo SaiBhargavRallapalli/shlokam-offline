@@ -220,6 +220,7 @@ async function api(){
   <li><code>GET /api/types</code> • <code>/api/type/:tag</code> (e.g. <a href="/api/type/Stotram"><code>/api/type/Stotram</code></a>) • <code>/api/bhagavatam/cantos</code></li>
   <li><code>GET /api/dictionary/search?q=</code> (Sanskrit→English)</li>
   <li><code>GET /api/pdf/:slug</code> (chapter PDF) • <code>/api/pdf-combined/gita</code> (all-in-one) • <code>/export/:slug.html</code> (print view)</li>
+  <li><code>GET /api/verse-audio?content_id=gita-2-47</code> (verse recitation 🔊) • <code>/api/audio?token=…</code> • <code>/api/audio/chapter/2</code> or <code>/1-1</code> (full-chapter recitation) • <code>/api/audio/status</code></li>
   </ul><p>Example: <a href="/api/explain?q=gita-2-47"><code>/api/explain?q=gita-2-47</code></a> • <a href="/api/dictionary/search?q=karma"><code>/api/dictionary/search?q=karma</code></a></p></div>`;
 }
 
@@ -251,7 +252,8 @@ async function chapter(kind, n){
 function renderVerses(verses, slug){
   return verses.map((v,i)=>{
     const cid = v.content_id || (i+1);
-    return `<div class="verse"><h3>${esc(typeof cid==='string'?cid:(v.verse??i+1))}</h3>
+    const audi = v.content_id ? `<button class="vplay" data-cid="${esc(v.content_id)}" title="Listen to recitation">🔊</button>` : '';
+    return `<div class="verse" id="vv-${i}"><h3>${esc(typeof cid==='string'?cid:(v.verse??i+1))}${audi}</h3>
     ${v.sanskrit?`<div class="sa f-sanskrit">${v.sanskrit}</div>`:''}
     ${v.roman?`<div class="ro f-roman">${v.roman}</div>`:''}
     ${v.colloquial?`<div class="ro">${v.colloquial}</div>`:''}
@@ -261,6 +263,60 @@ function renderVerses(verses, slug){
     </div>`;
   }).join('');
 }
+// Chapter recitation id: Gita "N", Bhagavatam "C-H", else null (verse queue).
+function chapterAudioSpec(slug){
+  let m = String(slug||'').match(/^gita__chapter-(\d+)$/);
+  if(m) return m[1];
+  m = String(slug||'').match(/^bhagavatam__canto-(\d+)-chapter-(\d+)$/);
+  if(m) return `${m[1]}-${m[2]}`;
+  return null;
+}
+// ---- audio player (verse & chapter recitation) ----
+const PL = { q: [], i: 0 };
+function plAudio(){ return $('#paudio'); }
+function plShow(){ $('#player').classList.remove('hidden'); }
+function plLabel(t){ $('#plabel').textContent = t; }
+function plMark(i){
+  $$('.verse.playing').forEach(e=>e.classList.remove('playing'));
+  const el = document.getElementById('vv-'+i);
+  if(el){ el.classList.add('playing'); el.scrollIntoView({block:'center',behavior:'smooth'}); }
+}
+function plPlayAt(i){
+  if(!PL.q.length) return;
+  PL.i = (i + PL.q.length) % PL.q.length;
+  const it = PL.q[PL.i];
+  const a = plAudio();
+  a.playbackRate = parseFloat($('#pspeed').value || '1');
+  plShow(); plLabel(it.label);
+  if(it.verseIdx != null) plMark(it.verseIdx);
+  else $$('.verse.playing').forEach(e=>e.classList.remove('playing'));
+  a.src = it.url; a.play().catch(()=>{});
+  $('#ptoggle').textContent = '⏸';
+}
+function plPlayItems(items, start=0){
+  PL.q = items; PL.skipped = 0;
+  if(!items.length){ toast('No recitation available here.'); return; }
+  plPlayAt(start);
+}
+function wirePlayer(){
+  const a = plAudio();
+  if(a.dataset.wired) return; a.dataset.wired = '1';
+  a.addEventListener('ended', ()=>{ if(PL.i < PL.q.length-1) plPlayAt(PL.i+1); else $('#ptoggle').textContent = '▶'; });
+  a.addEventListener('error', ()=>{
+    // verse recitation missing (404 JSON) — skip quietly in queues
+    if(PL.q.length > 1 && PL.i < PL.q.length-1){ PL.skipped = (PL.skipped||0)+1; plPlayAt(PL.i+1); }
+    else { $('#ptoggle').textContent = '▶'; toast('Recitation not available for this verse — try Play chapter.'); }
+  });
+  $('#ptoggle').onclick = ()=>{ if(a.paused){ a.play().catch(()=>{}); $('#ptoggle').textContent='⏸'; } else { a.pause(); $('#ptoggle').textContent='▶'; } };
+  $('#pnext').onclick = ()=>plPlayAt(PL.i+1);
+  $('#pprev').onclick = ()=>plPlayAt(PL.i-1);
+  $('#pclose').onclick = ()=>{ a.pause(); a.removeAttribute('src'); $('#player').classList.add('hidden'); $$('.verse.playing').forEach(e=>e.classList.remove('playing')); PL.q=[]; };
+  $('#pspeed').onchange = ()=>{ a.playbackRate = parseFloat($('#pspeed').value); };
+}
+function playVerse(cid, label){
+  wirePlayer();
+  plPlayItems([{ label: label || cid, url: '/api/verse-audio?content_id='+encodeURIComponent(cid), verseIdx: null }]);
+}
 function renderDoc(d, slug){
   const verses = d.verses || d.api?.verses || [];
   const s = slug || d.slug || '';
@@ -269,12 +325,37 @@ function renderDoc(d, slug){
   <div class="toolbar">
     <a class="btn" href="/api/pdf/${encodeURIComponent(s)}">⬇ Chapter PDF</a>
     <a class="btn secondary" href="/export/${encodeURIComponent(s)}.html" target="_blank">📄 Single-page / print view</a>
+    <button class="btn" id="playall">▶ Recitation</button>
     <button class="btn ghost" onclick="window.print()">🖨 Print</button>
     <button class="btn ghost" id="backbtn">← Back</button>
   </div>
   <p style="font-size:.85em;color:#666"><a href="/api/page/${encodeURIComponent(s)}">API</a> • <a href="/export/${encodeURIComponent(s)}.html" target="_blank" rel="noopener">print view</a></p></div>
   <div class="card"><div id="vv">${verses.length?renderVerses(verses,s):`<p>${esc(d.body_text||'No structured verses cached — see JSON.').slice(0,8000)}</p>`}</div></div>`;
   $('#backbtn').onclick = ()=>history.length?history.back():nav('home');
+  wirePlayer();
+  $$('#vv .vplay', view).forEach((b, bi)=>{
+    b.onclick = ()=>{
+      $$('.verse.playing').forEach(e=>e.classList.remove('playing'));
+      const card = b.closest('.verse');
+      if(card){ card.classList.add('playing'); }
+      playVerse(b.dataset.cid, `${d.title||s} — verse ${bi+1}`);
+      // mark the right card once playback starts
+      const cards = $$('#vv .verse'); const idx = cards.indexOf(card);
+      const old = PL.q[0]; if(old) old.verseIdx = idx;
+    };
+  });
+  const spec = chapterAudioSpec(s);
+  $('#playall').onclick = ()=>{
+    if(spec){
+      plPlayItems([{ label: `${d.title||s} — full recitation`, url: '/api/audio/chapter/'+encodeURIComponent(spec) }]);
+    } else if(verses.length){
+      plPlayItems(verses.map((v,i)=>({
+        label: `${d.title||s} — verse ${i+1}`,
+        url: '/api/verse-audio?content_id='+encodeURIComponent(v.content_id||''),
+        verseIdx: i,
+      })));
+    } else toast('No recitation available here.');
+  };
   applySettings();
 }
 async function doSearch(q){

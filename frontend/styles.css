@@ -34,5 +34,11 @@ code{background:#eee;padding:.1em .4em;border-radius:.3em}
 input,select{font-family:inherit}
 .dict-entry{border-bottom:1px solid var(--line);padding:.5rem 0}
 .dict-entry .sa-word{font-weight:bold;font-size:1.1em}
+.vplay{background:#fff3d6;border:1px solid #8a5a00;border-radius:1rem;padding:.15rem .55rem;cursor:pointer;font-size:.85em;margin-left:.4rem;vertical-align:middle}
+.verse.playing{outline:2px solid #8a5a00;border-radius:.6rem}
+.mini-player{position:fixed;left:50%;transform:translateX(-50%);bottom:12px;z-index:50;background:#1f1508;color:#ffe9bd;border-radius:1rem;padding:.5rem .8rem;display:flex;gap:.5rem;align-items:center;box-shadow:0 4px 16px rgba(0,0,0,.35);max-width:94vw}
+.mini-player button{background:#8a5a00;color:#fff;border:none;border-radius:.5rem;padding:.3rem .6rem;cursor:pointer}
+.mini-player select{background:#33240f;color:#ffe9bd;border:1px solid #6b4a12;border-radius:.5rem;padding:.2rem}
+#plabel{font-size:.85em;max-width:38vw;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .kicker{letter-spacing:.15em;font-size:.75em;color:#8a5a00;font-weight:bold}
 @media print{.topbar,.settingsbar,.toolbar,.footer,.searchbox{display:none} #view{max-width:none}}

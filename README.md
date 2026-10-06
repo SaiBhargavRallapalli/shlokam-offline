@@ -91,6 +91,15 @@ Set `LIVE_API_BASE=https://app.shlokam.org` (default) and `PORT=8080`.
 > exists. Set `CHROME_PATH` to override detection; the Docker image installs
 > `chromium` automatically.
 
+### Audio / voice (recitation for pronunciation)
+- Every verse shows 🔊 — verse recitation via `GET /api/verse-audio?content_id=gita-2-47`
+- Every chapter view has **▶ Recitation** — full-chapter chanting for Gita (`/api/audio/chapter/2`)
+  and Bhagavatam (`/api/audio/chapter/1-1`); other works play verse-by-verse queues
+- Mini player: play/pause, previous/next, 0.75–1.5× speed, auto-advance with verse highlighting
+- First listen streams live and caches to `data/audio/`; replays work offline.
+  Pre-fill a device with `python scraper/download_audio.py --gita-chapters`
+  (18 files, ~250 MB) or add `--gita-verses` (~150 MB) / `--chapter 4-16`.
+
 ### Dictionary (Sanskrit word → English)
 - Built by scraper from every `word_meaning` (`<b>word</b> – meaning`) + Gita keywords
 - UI: Dictionary tab; API: `GET /api/dictionary/search?q=karma`

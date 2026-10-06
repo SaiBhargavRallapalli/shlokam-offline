@@ -307,6 +307,95 @@ app.get("/api/type/:tag", (req, res) => {
   res.json({ tag, count: exact.length + partial.length, shlokas: [...exact, ...partial].slice(0, 200) });
 });
 
+// ---------- audio (verse & chapter recitation for pronunciation) ----------
+// Upstream serves signed-URL redirects, so we cache MP3 bytes locally:
+// data/audio/t-<token>.mp3 (verses) and data/audio/chapter-<spec>.mp3
+// (Gita "<N>" / Bhagavatam "<canto>-<chapter>" continuous recitation).
+// First listen streams live; replays (and offline use after download_audio.py)
+// come from disk. res.sendFile gives HTTP Range support for seeking.
+const AUDIO_DIR = path.join(DATA, "audio");
+const LIVE_AUDIO = process.env.LIVE_AUDIO_BASE || "https://shlokam.org";
+const TOKENS_FILE = path.join(AUDIO_DIR, "tokens.json");
+
+function readTokens() {
+  try { return JSON.parse(fs.readFileSync(TOKENS_FILE, "utf-8")); } catch { return {}; }
+}
+function writeTokens(m) {
+  try {
+    fs.mkdirSync(AUDIO_DIR, { recursive: true });
+    fs.writeFileSync(TOKENS_FILE, JSON.stringify(m));
+  } catch {}
+}
+async function fetchLiveMp3(apiPath, dest) {
+  const r = await fetch(LIVE_AUDIO + apiPath, { headers: { "User-Agent": "ShlokamLibrary/1.0" } });
+  if (!r.ok) throw new Error("live audio " + r.status);
+  const buf = Buffer.from(await r.arrayBuffer());
+  const mp3 = buf.length > 1024 && (buf.subarray(0, 3).toString() === "ID3" || (buf[0] === 0xff && (buf[1] & 0xe0) === 0xe0));
+  if (!mp3) throw new Error("not-mp3");
+  fs.mkdirSync(AUDIO_DIR, { recursive: true });
+  fs.writeFileSync(dest, buf);
+  return dest;
+}
+function sendMp3(res, file) {
+  res.sendFile(file, { headers: { "Content-Type": "audio/mpeg", "Accept-Ranges": "bytes" } });
+}
+
+app.get("/api/audio", async (req, res) => {
+  const token = String(req.query.token || "").trim();
+  if (!/^[A-Za-z0-9_-]{2,32}$/.test(token)) return res.status(400).json({ error: "bad token" });
+  const f = path.join(AUDIO_DIR, `t-${token}.mp3`);
+  if (!fs.existsSync(f)) {
+    try { await fetchLiveMp3(`/api/audio?token=${encodeURIComponent(token)}`, f); }
+    catch { return res.status(502).json({ error: "recitation unavailable" }); }
+  }
+  sendMp3(res, f);
+});
+
+app.get("/api/audio/chapter/:spec", async (req, res) => {
+  const spec = String(req.params.spec || "").trim();
+  if (!/^\d{1,2}(-\d{1,3})?$/.test(spec)) return res.status(400).json({ error: "bad chapter" });
+  const f = path.join(AUDIO_DIR, `chapter-${spec}.mp3`);
+  if (!fs.existsSync(f)) {
+    try { await fetchLiveMp3(`/api/audio/chapter/${spec}`, f); }
+    catch { return res.status(502).json({ error: "chapter recitation unavailable" }); }
+  }
+  sendMp3(res, f);
+});
+
+// Resolve a verse to its recitation. Normalizes href-style ids from chapter
+// pages ("gita/gita-2-1.htm" -> "gita-2-1"). Redirects to the cached MP3 URL.
+app.get("/api/verse-audio", async (req, res) => {
+  let cid = String(req.query.content_id || "").trim();
+  if (!cid) return res.status(400).json({ error: "missing content_id" });
+  const gm = cid.match(/gita-(\d+)-(\d+)/i);
+  if (gm) cid = `gita-${gm[1]}-${gm[2]}`;
+  tokMap = readTokens();
+  if (!(cid in tokMap)) {
+    try {
+      const j = await liveJson("/api/unified/explain?q=" + encodeURIComponent(cid));
+      tokMap[cid] = (j && j.has_audio >= 1 && j.url_token) ? j.url_token : null;
+    } catch {
+      tokMap[cid] = null;
+    }
+    writeTokens(tokMap);
+  }
+  const tok = tokMap[cid];
+  if (!tok) return res.status(404).json({ error: "no verse recitation" });
+  res.redirect(302, `/api/audio?token=${encodeURIComponent(tok)}`);
+});
+
+app.get("/api/audio/status", (req, res) => {
+  let files = 0, bytes = 0;
+  try {
+    for (const f of fs.readdirSync(AUDIO_DIR)) {
+      if (!f.endsWith(".mp3")) continue;
+      files++;
+      try { bytes += fs.statSync(path.join(AUDIO_DIR, f)).size; } catch {}
+    }
+  } catch {}
+  res.json({ files, bytes, mb: Math.round(bytes / 1048576) });
+});
+
 // ---------- dictionary ----------
 app.get("/api/dictionary/search", (req, res) => {
   const q = (req.query.q || "").trim().toLowerCase();
