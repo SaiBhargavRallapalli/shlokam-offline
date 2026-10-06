@@ -1,0 +1,4 @@
+beautifulsoup4>=4.12
+requests>=2.31
+lxml>=4.9
+tqdm>=4.66

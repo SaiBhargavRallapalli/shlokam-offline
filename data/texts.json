@@ -1,0 +1,194 @@
+[
+ {
+  "content_id": "text-anma-viddai-0-1-1",
+  "title": "Anma Viddai",
+  "verse_count": 7,
+  "url_token": "25FH"
+ },
+ {
+  "content_id": "text-aa-0-0-1",
+  "title": "Aparokshanubhuti",
+  "verse_count": 145,
+  "url_token": "VcEH"
+ },
+ {
+  "content_id": "text-ashtavakra-gita-1-0-1",
+  "title": "Ashtavakra Gita",
+  "verse_count": 298,
+  "url_token": "SR9Z"
+ },
+ {
+  "content_id": "text-atmabodha-0-0-1",
+  "title": "Atmabodha",
+  "verse_count": 69,
+  "url_token": "HAXd"
+ },
+ {
+  "content_id": "text-avadhuta-gita-1-0-1",
+  "title": "Avadhuta Gita",
+  "verse_count": 271,
+  "url_token": "FPvO"
+ },
+ {
+  "content_id": "text-brahma-jnanavali-mala-0-0-1",
+  "title": "Brahma Jnanavali Mala",
+  "verse_count": 21,
+  "url_token": "FX7C"
+ },
+ {
+  "content_id": "brahmasutras-1-1-1",
+  "title": "Brahma Sutras",
+  "verse_count": 555,
+  "url_token": "nfUv"
+ },
+ {
+  "content_id": "text-chandogya-1-1-0-invocation",
+  "title": "Chandogya Upanishad",
+  "verse_count": 621,
+  "url_token": "Ae3O"
+ },
+ {
+  "content_id": "text-dasa-shloki-0-0-1",
+  "title": "Dasa Shloki",
+  "verse_count": 11,
+  "url_token": "v6Qa"
+ },
+ {
+  "content_id": "text-ekatma-panchakam-0-0-1",
+  "title": "Ekatma Panchakam",
+  "verse_count": 6,
+  "url_token": "QWjz"
+ },
+ {
+  "content_id": "text-hastamalaka-0-0-0-a",
+  "title": "Hastamalaka Stotram",
+  "verse_count": 14,
+  "url_token": "LKiP"
+ },
+ {
+  "content_id": "text-isha-0-0-0-invocation",
+  "title": "Isha Upanishad",
+  "verse_count": 19,
+  "url_token": "7ES7"
+ },
+ {
+  "content_id": "text-kaivalya-0",
+  "title": "Kaivalya Upanishad",
+  "verse_count": 26,
+  "url_token": "d2ok"
+ },
+ {
+  "content_id": "text-kathopanishad-1-1-0",
+  "title": "Kathopanishad",
+  "verse_count": 121,
+  "url_token": "vrJt"
+ },
+ {
+  "content_id": "text-kaupina-0-0-1",
+  "title": "Kaupina Panchakam",
+  "verse_count": 5,
+  "url_token": "qMsd"
+ },
+ {
+  "content_id": "text-kena-1-0-0-invocation",
+  "title": "Kenopanishad",
+  "verse_count": 37,
+  "url_token": "GeV3"
+ },
+ {
+  "content_id": "text-mandukya-0-0-0-invocation",
+  "title": "Mandukya Upanishad",
+  "verse_count": 13,
+  "url_token": "2HQr"
+ },
+ {
+  "content_id": "text-mp-0-0-1-q1",
+  "title": "Manisha Panchakam",
+  "verse_count": 11,
+  "url_token": "FEPq"
+ },
+ {
+  "content_id": "text-mundaka-1-0-0",
+  "title": "Mundaka Upanishad",
+  "verse_count": 64,
+  "url_token": "KkwS"
+ },
+ {
+  "content_id": "text-prashna-1-0-0-invocation",
+  "title": "Prashnopanishad",
+  "verse_count": 68,
+  "url_token": "uXIy"
+ },
+ {
+  "content_id": "text-saddarshanam-0",
+  "title": "Saddarshanam",
+  "verse_count": 44,
+  "url_token": "qBFP"
+ },
+ {
+  "content_id": "text-sadhana-0-0-1",
+  "title": "Sadhana Panchakam",
+  "verse_count": 5,
+  "url_token": "6COB"
+ },
+ {
+  "content_id": "text-svarupanusandhanashtakam-1",
+  "title": "Svarupanusandhanashtakam",
+  "verse_count": 10,
+  "url_token": "gb69"
+ },
+ {
+  "content_id": "text-taittiriya-1-1-1",
+  "title": "Taittiriya Upanishad",
+  "verse_count": 54,
+  "url_token": "kk6E"
+ },
+ {
+  "content_id": "text-tattvabodha-0-0-0-verses",
+  "title": "Tattvabodha",
+  "verse_count": 43,
+  "url_token": "qrEm"
+ },
+ {
+  "content_id": "text-ulladu-narpadu-0-1-1",
+  "title": "Ulladu Narpadu",
+  "verse_count": 42,
+  "url_token": "lWRq"
+ },
+ {
+  "content_id": "text-ulladu-narpadu-anubandham-0-1-1",
+  "title": "Ulladu Narpadu Anubandham",
+  "verse_count": 41,
+  "url_token": "X9tK"
+ },
+ {
+  "content_id": "text-upadesa-0-0-1",
+  "title": "Upadesa Saaram",
+  "verse_count": 30,
+  "url_token": "qCRy"
+ },
+ {
+  "content_id": "text-upadesa-undiyar-0-1-1",
+  "title": "Upadesa Undiyar",
+  "verse_count": 35,
+  "url_token": "IYAl"
+ },
+ {
+  "content_id": "text-vakya-vritti-0-0-1",
+  "title": "Vakya Vritti",
+  "verse_count": 54,
+  "url_token": "R4xc"
+ },
+ {
+  "content_id": "text-vivekachudamani-1",
+  "title": "Vivekachudamani",
+  "verse_count": 580,
+  "url_token": "hWWt"
+ },
+ {
+  "content_id": "text-yogasutra-1-0-1",
+  "title": "Yogasutra",
+  "verse_count": 196,
+  "url_token": "tFvR"
+ }
+]

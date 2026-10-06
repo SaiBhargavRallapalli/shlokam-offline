@@ -1,0 +1,11 @@
+services:
+  web:
+    build: .
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./data:/app/data:ro
+    environment:
+      - PORT=8080
+      - LIVE_API_BASE=https://app.shlokam.org
+    restart: unless-stopped

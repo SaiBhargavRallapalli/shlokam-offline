@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Shlokam Library — Gita • Texts • Bhagavatam • Shlokas</title>
+<meta name="description" content="Offline-capable mirror for personal study: Bhagavad Gita, Upanishads & texts, Bhagavatam, shlokas by deity/type, Sanskrit dictionary, PDF export.">
+<link rel="manifest" href="manifest.json">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="brand"><span class="logo">॥</span> <strong>Shlokam Library</strong> <span class="tag">scriptures for study</span></div>
+  <nav class="tabs" id="tabs">
+    <button data-route="home" class="active">Home</button>
+    <button data-route="gita">Bhagavad Gita</button>
+    <button data-route="texts">Texts</button>
+    <button data-route="bhagavatam">Bhagavatam</button>
+    <button data-route="deities">Browse by deity</button>
+    <button data-route="types">Browse by type</button>
+    <button data-route="site">Site</button>
+    <button data-route="dictionary">Dictionary</button>
+    <button data-route="api">API</button>
+  </nav>
+  <div class="searchbox">
+    <input id="q" type="search" placeholder="Search verses, texts, deities… (min 2 chars)" autocomplete="off">
+    <button id="qbtn">Search</button>
+  </div>
+</header>
+
+<div class="settingsbar">
+  <label>Show:
+    <label><input type="checkbox" data-field="sanskrit" checked> Sanskrit</label>
+    <label><input type="checkbox" data-field="roman" checked> Transliteration</label>
+    <label><input type="checkbox" data-field="translation" checked> Translation</label>
+    <label><input type="checkbox" data-field="word_meaning" checked> Word-meanings</label>
+  </label>
+  <label>Size:
+    <select id="fontsize"><option value="small">Small</option><option value="regular" selected>Regular</option><option value="large">Large</option></select>
+  </label>
+  <span id="netstatus" class="netstatus">● checking…</span>
+</div>
+
+<main id="view"></main>
+
+<footer class="footer">
+  <nav class="footer-nav">
+    <a href="#" data-route="home">Home</a> •
+    <a href="#" data-route="gita">Gita</a> •
+    <a href="#" data-route="texts">Texts</a> •
+    <a href="#" data-route="bhagavatam">Bhagavatam</a> •
+    <a href="#" data-route="dictionary">Dictionary</a> •
+    <a href="#" data-route="api">API</a>
+  </nav>
+  <p>© 2026 Shlokam Library · Sanskrit texts with translation &amp; word-meanings · <span id="cacheinfo"></span></p>
+</footer>
+
+<script src="app.js"></script>
+<script>
+if ('serviceWorker' in navigator) { navigator.serviceWorker.register('sw.js').catch(()=>{}); }
+</script>
+</body>
+</html>

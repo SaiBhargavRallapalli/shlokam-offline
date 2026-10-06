@@ -1,0 +1,108 @@
+[
+ {
+  "group": "Core Philosophy",
+  "count": 6,
+  "topics": [
+   {
+    "topic": "Brahman - Ultimate Reality",
+    "slug": "brahman-ultimate-reality"
+   },
+   {
+    "topic": "Atman - Soul and Self",
+    "slug": "atman-soul-and-self"
+   },
+   {
+    "topic": "Moksha - Liberation",
+    "slug": "moksha-liberation"
+   },
+   {
+    "topic": "Karma - Action and Causality",
+    "slug": "karma-action-and-causality"
+   },
+   {
+    "topic": "Maya - Illusion and Reality",
+    "slug": "maya-illusion-and-reality"
+   },
+   {
+    "topic": "Samsara - Cycle of Rebirth",
+    "slug": "samsara-cycle-of-rebirth"
+   }
+  ]
+ },
+ {
+  "group": "Practice and Living",
+  "count": 3,
+  "topics": [
+   {
+    "topic": "Dharma - Righteous Living",
+    "slug": "dharma-righteous-living"
+   },
+   {
+    "topic": "Foundations for Practice",
+    "slug": "foundations-for-practice"
+   },
+   {
+    "topic": "Spiritual Practices and Techniques",
+    "slug": "spiritual-practices-and-techniques"
+   }
+  ]
+ },
+ {
+  "group": "The Paths",
+  "count": 4,
+  "topics": [
+   {
+    "topic": "Karma Yoga - Path of Selfless Action",
+    "slug": "karma-yoga-path-of-selfless-action"
+   },
+   {
+    "topic": "Bhakti Yoga - Path of Devotion",
+    "slug": "bhakti-yoga-path-of-devotion"
+   },
+   {
+    "topic": "Jnana Yoga - Path of Knowledge",
+    "slug": "jnana-yoga-path-of-knowledge"
+   },
+   {
+    "topic": "Raja Yoga - Path of Meditation",
+    "slug": "raja-yoga-path-of-meditation"
+   }
+  ]
+ },
+ {
+  "group": "Nature and Qualities",
+  "count": 3,
+  "topics": [
+   {
+    "topic": "Mental States and Afflictions",
+    "slug": "mental-states-and-afflictions"
+   },
+   {
+    "topic": "The Three Gunas",
+    "slug": "the-three-gunas"
+   },
+   {
+    "topic": "Divine and Demonic Qualities",
+    "slug": "divine-and-demonic-qualities"
+   }
+  ]
+ },
+ {
+  "group": "Krishna's Teaching",
+  "count": 3,
+  "topics": [
+   {
+    "topic": "Krishna and the Divine",
+    "slug": "krishna-and-the-divine"
+   },
+   {
+    "topic": "The Dialogue and Arjuna's Journey",
+    "slug": "the-dialogue-and-arjuna-s-journey"
+   },
+   {
+    "topic": "Additional Teachings",
+    "slug": "additional-teachings"
+   }
+  ]
+ }
+]
