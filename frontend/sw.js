@@ -1,5 +1,5 @@
 /* Offline-first service worker: cache app shell + API JSON for offline use */
-const CACHE = 'shlokam-v3';
+const CACHE = 'shlokam-v4';
 const SHELL = ['/', '/index.html', '/styles.css', '/app.js', '/manifest.json'];
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(SHELL)).then(()=>self.skipWaiting()));

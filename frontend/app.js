@@ -62,10 +62,10 @@ async function home(){
     </div>
   </div>
   <div class="grid">
-    <div class="card"><h3>Bhagavad Gita</h3><p>18 chapters, 701 verses. Chapter view, single-page view, per-chapter PDF + combined PDF.</p><button class="btn" data-nav="gita">Browse</button></div>
-    <div class="card"><h3>Texts (Upanishads…)</h3><p>Aparokshanubhuti, Brahma Sutras, Chandogya, Isha, Vivekachudamani, Yogasutra + 26 more.</p><button class="btn" data-nav="texts">Browse</button></div>
-    <div class="card"><h3>Bhagavatam</h3><p>Canto → chapter → verses with word-meanings. Chapter PDF + print view.</p><button class="btn" data-nav="bhagavatam">Browse</button></div>
-    <div class="card"><h3>Shlokas</h3><p>Browse by deity (Shiva, Vishnu, Devi…) and by type (Stotram, Ashtakam, Kavacham, Suktam…).</p><button class="btn" data-nav="deities">By deity</button> <button class="btn secondary" data-nav="types">By type</button></div>
+    <div class="card"><h3>Bhagavad Gita</h3><p>18 chapters, 701 verses. Chapter view, 🔊 verse &amp; chapter recitation, single-page view, PDFs.</p><button class="btn" data-nav="gita">Browse</button></div>
+    <div class="card"><h3>Texts (Upanishads…)</h3><p>Aparokshanubhuti, Brahma Sutras, Chandogya, Isha, Vivekachudamani, Yogasutra + 26 more — with 🔊 recitation.</p><button class="btn" data-nav="texts">Browse</button></div>
+    <div class="card"><h3>Bhagavatam</h3><p>Canto → chapter → verses with word-meanings, 🔊 chapter recitation, chapter PDF + print view.</p><button class="btn" data-nav="bhagavatam">Browse</button></div>
+    <div class="card"><h3>Shlokas</h3><p>Browse by deity (Shiva, Vishnu, Devi…) and by type (Stotram, Ashtakam, Kavacham, Suktam…) — with 🔊 recitation.</p><button class="btn" data-nav="deities">By deity</button> <button class="btn secondary" data-nav="types">By type</button></div>
   </div>`;
   $$('[data-nav]', view).forEach(b=>b.onclick=()=>nav(b.dataset.nav));
 }
