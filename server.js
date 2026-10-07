@@ -336,8 +336,12 @@ async function fetchLiveMp3(apiPath, dest) {
   fs.writeFileSync(dest, buf);
   return dest;
 }
-function sendMp3(res, file) {
-  res.sendFile(file, { headers: { "Content-Type": "audio/mpeg", "Accept-Ranges": "bytes" } });
+function sendMp3(req, res, file, filename) {
+  if (req.query.download) {
+    res.download(file, filename || "recitation.mp3");
+  } else {
+    res.sendFile(file, { headers: { "Content-Type": "audio/mpeg", "Accept-Ranges": "bytes" } });
+  }
 }
 
 app.get("/api/audio", async (req, res) => {
@@ -348,7 +352,7 @@ app.get("/api/audio", async (req, res) => {
     try { await fetchLiveMp3(`/api/audio?token=${encodeURIComponent(token)}`, f); }
     catch { return res.status(502).json({ error: "recitation unavailable" }); }
   }
-  sendMp3(res, f);
+  sendMp3(req, res, f, `verse-${token}.mp3`);
 });
 
 app.get("/api/audio/chapter/:spec", async (req, res) => {
@@ -359,7 +363,7 @@ app.get("/api/audio/chapter/:spec", async (req, res) => {
     try { await fetchLiveMp3(`/api/audio/chapter/${spec}`, f); }
     catch { return res.status(502).json({ error: "chapter recitation unavailable" }); }
   }
-  sendMp3(res, f);
+  sendMp3(req, res, f, `recitation-chapter-${spec}.mp3`);
 });
 
 // Resolve a verse to its recitation. Normalizes href-style ids from chapter
@@ -381,7 +385,8 @@ app.get("/api/verse-audio", async (req, res) => {
   }
   const tok = tokMap[cid];
   if (!tok) return res.status(404).json({ error: "no verse recitation" });
-  res.redirect(302, `/api/audio?token=${encodeURIComponent(tok)}`);
+  const dl = req.query.download ? "&download=1" : "";
+  res.redirect(302, `/api/audio?token=${encodeURIComponent(tok)}${dl}`);
 });
 
 app.get("/api/audio/status", (req, res) => {

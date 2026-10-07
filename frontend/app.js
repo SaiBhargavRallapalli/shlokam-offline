@@ -292,6 +292,9 @@ function plPlayAt(i){
   else $$('.verse.playing').forEach(e=>e.classList.remove('playing'));
   a.src = it.url; a.play().catch(()=>{});
   $('#ptoggle').textContent = '⏸';
+  const dl = $('#pdl');
+  dl.href = it.url + (it.url.includes('?') ? '&download=1' : '?download=1');
+  dl.setAttribute('download', '');
 }
 function plPlayItems(items, start=0){
   PL.q = items; PL.skipped = 0;
@@ -326,6 +329,7 @@ function renderDoc(d, slug){
     <a class="btn" href="/api/pdf/${encodeURIComponent(s)}">⬇ Chapter PDF</a>
     <a class="btn secondary" href="/export/${encodeURIComponent(s)}.html" target="_blank">📄 Single-page / print view</a>
     <button class="btn" id="playall">▶ Recitation</button>
+    ${chapterAudioSpec(s) ? `<a class="btn secondary" href="/api/audio/chapter/${encodeURIComponent(chapterAudioSpec(s))}?download=1">⬇ Audio</a>` : ""}
     <button class="btn ghost" onclick="window.print()">🖨 Print</button>
     <button class="btn ghost" id="backbtn">← Back</button>
   </div>

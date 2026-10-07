@@ -63,6 +63,10 @@ with _u.urlopen(req, timeout=90) as r:
     check("chapter audio range", r.status==206 and r.headers.get_content_type()=="audio/mpeg", f"{r.status} {r.headers.get_content_type()}") if hasattr(r.headers, 'get_content_type') else check("chapter audio range", r.status==206, str(r.status))
 s,_,d = get("/api/audio/status")
 check("audio status", json.loads(d).get("files",0)>=1, d[:100])
+req = _u.Request(BASE+"/api/audio?token=1Yru&download=1")
+with _u.urlopen(req, timeout=60) as r:
+    cd = r.headers.get("Content-Disposition") or ""
+    check("audio download", r.status==200 and "attachment" in cd and r.headers.get_content_type()=="audio/mpeg", f"{r.status} {cd}")
 
 print(f"\n{len(fails)} failures" if fails else "\nALL TESTS PASSED")
 sys.exit(1 if fails else 0)
